@@ -1,0 +1,57 @@
+package GET;
+
+message TaskParam
+{
+    enum DataPosition
+    {
+        FILE = 0;
+        HOSTMEM = 1;
+    }
+
+    optional DataPosition source_pos = 1 [default = HOSTMEM];
+    repeated string sourcef = 2;
+    repeated uint64 sourcem = 3;
+    optional DataPosition result_pos = 4 [default = HOSTMEM];
+    repeated string resultf = 5;
+    repeated uint64 resultm = 6;
+
+    enum TaskType
+    {
+        ADD = 0;
+        SUB = 1;
+        MULTI = 2;
+        CONVOLUTION = 3;
+        POOLING = 4;
+    }
+
+    optional TaskType type = 7;
+
+    optional AddParam add_param = 8;
+    optional SubParam sub_param = 9;
+    optional MulParam mul_param = 10;
+  //  optional ConvParam conv_param_ = 11;
+  //  optional PoolParam pool_param_ = 12;
+}
+
+message AddParam
+{
+    optional int32 height = 1;
+    optional int32 width = 2;
+    optional int32 channels = 3 [default = 1];
+}
+
+message SubParam
+{
+    optional int32 height = 1;
+    optional int32 width = 2;
+    optional int32 channels = 3 [default = 1];
+}
+
+message MulParam
+{
+    optional int32 height_A = 1;
+    optional int32 width_A = 2;
+    optional int32 height_B = 3;
+    optional int32 width_B = 4;
+    optional int32 channels = 5 [default = 1];  
+}

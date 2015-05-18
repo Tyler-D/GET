@@ -54,6 +54,15 @@ cl_readSource(char* srcPath)
 	cout << src <<endl;
     return src; 
 }
+unsigned int RoundUp(unsigned int value, unsigned int multiple)
+{
+    unsigned int remainder = value % multiple;
+    if (remainder != 0)
+    {
+        value += (multiple-remainder);
+    }
+    return value;
+}
 #if 0
 float*
 cl_readImagef_gray_cv(char* imgPath, int* img_width, int* img_height, void* Array)

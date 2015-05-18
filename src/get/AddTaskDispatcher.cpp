@@ -7,7 +7,7 @@
 
 #include<iostream>
 using namespace std;
-#include"AddTaskDispatcher.h"
+#include"TaskDispatcher.h"
 
 template <typename Dtype>
 void 
@@ -127,7 +127,7 @@ AddTaskDispatcher<Dtype>::TaskDispatch()
 
             this->ordinary_tasks_.push_back(temp_task);
             cout<<"create " << i << " addtask" <<endl;  
-            offset = height_each*(add_param_.width())*sizeof(Dtype);
+            offset += height_each*(add_param_.width())*sizeof(Dtype);
         } // end for 
 
             height_each = add_param_.height() - height_current;

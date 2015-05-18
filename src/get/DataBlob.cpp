@@ -19,11 +19,12 @@ DataBlob<Dtype>::Reshape_HOST(const int n, const int c, const int h, const int w
 	height_ = h;
 	width_ = w;
     count_ = num_ * channels_ * height_ * width_;
-	if (count_ > capacity_ )
+/*	if (count_ > capacity_ )
 	{
 		capacity_ = count_;
 	    host_data_ptr_ =(Dtype *) malloc(capacity_ * sizeof(Dtype));
 	}
+*/
 }
 
 template <typename Dtype>
@@ -62,6 +63,16 @@ DataBlob<Dtype>::Reshape_DEVICE(const int n, const int c, const int h, const int
 	}  
 }
 */
+
+template <typename Dtype>
+DataBlob<Dtype>::DataBlob(void* ptr, const int n, const int c , const int h, const int w)
+{
+    num_ = n;
+    channels_ = c;
+    height_ = h;
+    width_ = w;
+    host_data_ptr_ = ptr;
+}
 
 template <typename Dtype>
 DataBlob<Dtype>::DataBlob(const int n, const int c, const int h, const int w)

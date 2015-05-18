@@ -10,7 +10,8 @@
 #include"TaskManager.h"
 #include"DeviceManager.h"
 #include"io.h"
-#include"CommonTask.h"
+#include"BaseTask.h"
+#include"StreamTask.h"
 #include<CL/cl.h>
 using namespace std;
 

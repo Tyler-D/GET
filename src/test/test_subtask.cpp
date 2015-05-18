@@ -9,7 +9,6 @@
 #include<stdlib.h>
 using namespace std;
 #include"BaseTask.h"
-#include"CommonTask.h"
 #include"DeviceManager.h"
 
 int 
@@ -55,7 +54,7 @@ main(int argc ,char** argv)
     task.AddtoDatas(data[1]);
     task.AddtoResults(data[2]);
 
-    task.TaskOn();
+    BaseTaskOn<int>((void *)&task);
 
     cout<<"task finished"<<endl;
 

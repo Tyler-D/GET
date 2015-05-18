@@ -17,6 +17,8 @@ cl_pStatus(cl_int status, string funcName);
 char* 
 cl_readSource(char* srcPath);
 
+unsigned int 
+RoundUp(unsigned int value, unsigned int multiple);
 //float*
 //cl_readImagef_gray_cv(char* imgPath, int* img_width, int* img_height, void* Array);
 #endif

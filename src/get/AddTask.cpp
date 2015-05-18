@@ -7,9 +7,10 @@
 
 #include<iostream>
 using namespace std;
-#include"AddTask.h"
+#include"BaseTask.h"
 #include<CL/cl.h>
 #include"opencl_z.h"
+#include<typeinfo>
 
 #define GLOBAL_WORKGROUP_HEIGHT 4096
 #define GLOBAL_WORKGROUP_WIDTH 4096
@@ -55,7 +56,18 @@ AddTask<Dtype>::Compute()
 {
    //read program source and create kernel
     cl_int status;
-    char* program_source = cl_readSource("/home/zy/GET/src/get/add_task.cl");
+    
+    char* program_source =NULL;
+
+    if (typeid(Dtype) == typeid(int))
+         program_source = cl_readSource("/home/zy/GET/src/get/add_task_int.cl");
+    if (typeid(Dtype) == typeid(long))
+         program_source = cl_readSource("/home/zy/GET/src/get/add_task_long.cl");
+    if (typeid(Dtype) == typeid(float))
+         program_source = cl_readSource("/home/zy/GET/src/get/add_task_float.cl");
+    if (typeid(Dtype) == typeid(double))
+         program_source = cl_readSource("/home/zy/GET/src/get/add_task_double.cl");
+
     cl_program program = clCreateProgramWithSource(this->device_->DeviceContext(), 1, (const char**)&program_source, NULL, &status);
     cl_pStatus(status, "clCreateProgramWithSource");
 

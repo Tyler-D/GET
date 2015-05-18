@@ -26,11 +26,12 @@ class TaskManager
     int TaskOn();
     void TaskRequestRemote();
     void Init();
+    int GetTaskDispatcher(GET::TaskParam param);
 
     typedef enum {TASKWAIT,TASKON,TASKFINISHED} TaskStatus;
 
     protected:
-    map<int, TaskDispatcher<Dtype> > tasks_;
+    map<int, TaskDispatcher<Dtype>* > tasks_;
     //map<int, GET::TaskParam> tasks_params_;
     map<int, TaskStatus> tasks_status_;
     DeviceManager device_manager_;

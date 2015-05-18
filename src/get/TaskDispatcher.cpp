@@ -10,7 +10,7 @@ using namespace std;
 #include"TaskDispatcher.h"
 #include<stdio.h>
 #include<stdlib.h>
-
+#include<pthread.h>
 
 template <typename Dtype>
 TaskDispatcher<Dtype>:: ~TaskDispatcher()
@@ -90,14 +90,23 @@ template <typename Dtype>
 void 
 TaskDispatcher<Dtype>::ComputeAll()
 {
+    int thread_error; 
     switch (process_type_)
     {
         case ORDINARY :
         {   
-            for(int i = 0; i < ordinary_tasks_.size(); i++)
+            int tasks_num = ordinary_tasks_.size();
+            pthread_t tid[tasks_num];
+            for(int i = 0; i < tasks_num; i++)
             {
                 cout<<"task "<< i << " begin" <<endl;
-                ordinary_tasks_[i]->TaskOn();
+                thread_error = pthread_create(&tid[i], NULL, BaseTaskOn<Dtype>,(void*)ordinary_tasks_[i]);
+
+            }
+            
+            for(int i = 0; i < tasks_num; i++ )
+            {
+                pthread_join(tid[i], NULL);
             }
             break;
         }

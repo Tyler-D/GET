@@ -22,6 +22,9 @@ message TaskParam
         MULTI = 2;
         CONVOLUTION = 3;
         POOLING = 4;
+        LRN = 5;
+        RELU = 6;
+        Sigmoid = 7;
     }
 
     optional TaskType type = 7;
@@ -29,8 +32,11 @@ message TaskParam
     optional AddParam add_param = 8;
     optional SubParam sub_param = 9;
     optional MulParam mul_param = 10;
-  //  optional ConvParam conv_param_ = 11;
-  //  optional PoolParam pool_param_ = 12;
+    optional ConvParam conv_param = 11;
+    optional PoolParam pool_param = 12;
+    optional LRNParam lrn_param = 13;
+    optional ReLUParam relu_param =14;
+    optional SigmoidParam sigmoid_param = 15;
 }
 
 message AddParam
@@ -49,9 +55,54 @@ message SubParam
 
 message MulParam
 {
-    optional int32 height_A = 1;
-    optional int32 width_A = 2;
-    optional int32 height_B = 3;
-    optional int32 width_B = 4;
-    optional int32 channels = 5 [default = 1];  
+    optional int32 M = 1;
+    optional int32 K = 2;
+    optional int32 N = 3;
+    optional int32 channels = 4 [default = 1];  
+}
+
+message ConvParam
+{
+    optional int32 data_h = 1;
+    optional int32 data_w = 2;
+    optional int32 filter_h = 3;
+    optional int32 filter_w = 4;
+    optional int32 stride_h = 5 [default = 1];
+    optional int32 stride_w = 6 [default = 1];
+    optional int32 pad_h = 7 [default = 0];
+    optional int32 pad_w = 8 [default = 0];
+    optional int32 channels = 9 [default = 1];
+}
+
+message PoolParam
+{
+    optional int32 data_h = 1;
+    optional int32 data_w = 2;
+    optional int32 kernel_h = 3;
+    optional int32 kernel_w = 4;
+    optional int32 stride_h = 5 [default = 1];
+    optional int32 stride_w = 6 [default = 1];
+    optional int32 pad_h = 7 [default = 0];
+    optional int32 pad_w = 8 [default = 0];
+    optional int32 channels = 9 [default = 1];
+}
+
+message LRNParam
+{
+    optional int32 channels = 1 [default = 0];    
+}
+
+
+message ReLUParam
+{
+    optional int32 height = 1 [default = 1];
+    optional int32 width = 2;
+    optional int32 channels = 3 [default = 1];
+}
+
+message SigmoidParam
+{
+    optional int32 height = 1 [default = 1];
+    optional int32 width = 2;
+    optional int32 channels = 3 [default = 1];
 }

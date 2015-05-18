@@ -38,6 +38,11 @@ class TaskParam;
 class AddParam;
 class SubParam;
 class MulParam;
+class ConvParam;
+class PoolParam;
+class LRNParam;
+class ReLUParam;
+class SigmoidParam;
 
 enum TaskParam_DataPosition {
   TaskParam_DataPosition_FILE = 0,
@@ -63,11 +68,14 @@ enum TaskParam_TaskType {
   TaskParam_TaskType_SUB = 1,
   TaskParam_TaskType_MULTI = 2,
   TaskParam_TaskType_CONVOLUTION = 3,
-  TaskParam_TaskType_POOLING = 4
+  TaskParam_TaskType_POOLING = 4,
+  TaskParam_TaskType_LRN = 5,
+  TaskParam_TaskType_RELU = 6,
+  TaskParam_TaskType_Sigmoid = 7
 };
 bool TaskParam_TaskType_IsValid(int value);
 const TaskParam_TaskType TaskParam_TaskType_TaskType_MIN = TaskParam_TaskType_ADD;
-const TaskParam_TaskType TaskParam_TaskType_TaskType_MAX = TaskParam_TaskType_POOLING;
+const TaskParam_TaskType TaskParam_TaskType_TaskType_MAX = TaskParam_TaskType_Sigmoid;
 const int TaskParam_TaskType_TaskType_ARRAYSIZE = TaskParam_TaskType_TaskType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* TaskParam_TaskType_descriptor();
@@ -164,6 +172,9 @@ class TaskParam : public ::google::protobuf::Message {
   static const TaskType MULTI = TaskParam_TaskType_MULTI;
   static const TaskType CONVOLUTION = TaskParam_TaskType_CONVOLUTION;
   static const TaskType POOLING = TaskParam_TaskType_POOLING;
+  static const TaskType LRN = TaskParam_TaskType_LRN;
+  static const TaskType RELU = TaskParam_TaskType_RELU;
+  static const TaskType Sigmoid = TaskParam_TaskType_Sigmoid;
   static inline bool TaskType_IsValid(int value) {
     return TaskParam_TaskType_IsValid(value);
   }
@@ -291,6 +302,51 @@ class TaskParam : public ::google::protobuf::Message {
   inline ::GET::MulParam* release_mul_param();
   inline void set_allocated_mul_param(::GET::MulParam* mul_param);
 
+  // optional .GET.ConvParam conv_param = 11;
+  inline bool has_conv_param() const;
+  inline void clear_conv_param();
+  static const int kConvParamFieldNumber = 11;
+  inline const ::GET::ConvParam& conv_param() const;
+  inline ::GET::ConvParam* mutable_conv_param();
+  inline ::GET::ConvParam* release_conv_param();
+  inline void set_allocated_conv_param(::GET::ConvParam* conv_param);
+
+  // optional .GET.PoolParam pool_param = 12;
+  inline bool has_pool_param() const;
+  inline void clear_pool_param();
+  static const int kPoolParamFieldNumber = 12;
+  inline const ::GET::PoolParam& pool_param() const;
+  inline ::GET::PoolParam* mutable_pool_param();
+  inline ::GET::PoolParam* release_pool_param();
+  inline void set_allocated_pool_param(::GET::PoolParam* pool_param);
+
+  // optional .GET.LRNParam lrn_param = 13;
+  inline bool has_lrn_param() const;
+  inline void clear_lrn_param();
+  static const int kLrnParamFieldNumber = 13;
+  inline const ::GET::LRNParam& lrn_param() const;
+  inline ::GET::LRNParam* mutable_lrn_param();
+  inline ::GET::LRNParam* release_lrn_param();
+  inline void set_allocated_lrn_param(::GET::LRNParam* lrn_param);
+
+  // optional .GET.ReLUParam relu_param = 14;
+  inline bool has_relu_param() const;
+  inline void clear_relu_param();
+  static const int kReluParamFieldNumber = 14;
+  inline const ::GET::ReLUParam& relu_param() const;
+  inline ::GET::ReLUParam* mutable_relu_param();
+  inline ::GET::ReLUParam* release_relu_param();
+  inline void set_allocated_relu_param(::GET::ReLUParam* relu_param);
+
+  // optional .GET.SigmoidParam sigmoid_param = 15;
+  inline bool has_sigmoid_param() const;
+  inline void clear_sigmoid_param();
+  static const int kSigmoidParamFieldNumber = 15;
+  inline const ::GET::SigmoidParam& sigmoid_param() const;
+  inline ::GET::SigmoidParam* mutable_sigmoid_param();
+  inline ::GET::SigmoidParam* release_sigmoid_param();
+  inline void set_allocated_sigmoid_param(::GET::SigmoidParam* sigmoid_param);
+
   // @@protoc_insertion_point(class_scope:GET.TaskParam)
  private:
   inline void set_has_source_pos();
@@ -305,6 +361,16 @@ class TaskParam : public ::google::protobuf::Message {
   inline void clear_has_sub_param();
   inline void set_has_mul_param();
   inline void clear_has_mul_param();
+  inline void set_has_conv_param();
+  inline void clear_has_conv_param();
+  inline void set_has_pool_param();
+  inline void clear_has_pool_param();
+  inline void set_has_lrn_param();
+  inline void clear_has_lrn_param();
+  inline void set_has_relu_param();
+  inline void clear_has_relu_param();
+  inline void set_has_sigmoid_param();
+  inline void clear_has_sigmoid_param();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -317,10 +383,15 @@ class TaskParam : public ::google::protobuf::Message {
   ::GET::AddParam* add_param_;
   ::GET::SubParam* sub_param_;
   ::GET::MulParam* mul_param_;
+  ::GET::ConvParam* conv_param_;
+  ::GET::PoolParam* pool_param_;
+  ::GET::LRNParam* lrn_param_;
+  ::GET::ReLUParam* relu_param_;
+  ::GET::SigmoidParam* sigmoid_param_;
   int type_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(15 + 31) / 32];
 
   friend void  protobuf_AddDesc_GET_2eproto();
   friend void protobuf_AssignDesc_GET_2eproto();
@@ -589,64 +660,54 @@ class MulParam : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional int32 height_A = 1;
-  inline bool has_height_a() const;
-  inline void clear_height_a();
-  static const int kHeightAFieldNumber = 1;
-  inline ::google::protobuf::int32 height_a() const;
-  inline void set_height_a(::google::protobuf::int32 value);
+  // optional int32 M = 1;
+  inline bool has_m() const;
+  inline void clear_m();
+  static const int kMFieldNumber = 1;
+  inline ::google::protobuf::int32 m() const;
+  inline void set_m(::google::protobuf::int32 value);
 
-  // optional int32 width_A = 2;
-  inline bool has_width_a() const;
-  inline void clear_width_a();
-  static const int kWidthAFieldNumber = 2;
-  inline ::google::protobuf::int32 width_a() const;
-  inline void set_width_a(::google::protobuf::int32 value);
+  // optional int32 K = 2;
+  inline bool has_k() const;
+  inline void clear_k();
+  static const int kKFieldNumber = 2;
+  inline ::google::protobuf::int32 k() const;
+  inline void set_k(::google::protobuf::int32 value);
 
-  // optional int32 height_B = 3;
-  inline bool has_height_b() const;
-  inline void clear_height_b();
-  static const int kHeightBFieldNumber = 3;
-  inline ::google::protobuf::int32 height_b() const;
-  inline void set_height_b(::google::protobuf::int32 value);
+  // optional int32 N = 3;
+  inline bool has_n() const;
+  inline void clear_n();
+  static const int kNFieldNumber = 3;
+  inline ::google::protobuf::int32 n() const;
+  inline void set_n(::google::protobuf::int32 value);
 
-  // optional int32 width_B = 4;
-  inline bool has_width_b() const;
-  inline void clear_width_b();
-  static const int kWidthBFieldNumber = 4;
-  inline ::google::protobuf::int32 width_b() const;
-  inline void set_width_b(::google::protobuf::int32 value);
-
-  // optional int32 channels = 5 [default = 1];
+  // optional int32 channels = 4 [default = 1];
   inline bool has_channels() const;
   inline void clear_channels();
-  static const int kChannelsFieldNumber = 5;
+  static const int kChannelsFieldNumber = 4;
   inline ::google::protobuf::int32 channels() const;
   inline void set_channels(::google::protobuf::int32 value);
 
   // @@protoc_insertion_point(class_scope:GET.MulParam)
  private:
-  inline void set_has_height_a();
-  inline void clear_has_height_a();
-  inline void set_has_width_a();
-  inline void clear_has_width_a();
-  inline void set_has_height_b();
-  inline void clear_has_height_b();
-  inline void set_has_width_b();
-  inline void clear_has_width_b();
+  inline void set_has_m();
+  inline void clear_has_m();
+  inline void set_has_k();
+  inline void clear_has_k();
+  inline void set_has_n();
+  inline void clear_has_n();
   inline void set_has_channels();
   inline void clear_has_channels();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::int32 height_a_;
-  ::google::protobuf::int32 width_a_;
-  ::google::protobuf::int32 height_b_;
-  ::google::protobuf::int32 width_b_;
+  ::google::protobuf::int32 m_;
+  ::google::protobuf::int32 k_;
+  ::google::protobuf::int32 n_;
   ::google::protobuf::int32 channels_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
 
   friend void  protobuf_AddDesc_GET_2eproto();
   friend void protobuf_AssignDesc_GET_2eproto();
@@ -654,6 +715,616 @@ class MulParam : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static MulParam* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ConvParam : public ::google::protobuf::Message {
+ public:
+  ConvParam();
+  virtual ~ConvParam();
+
+  ConvParam(const ConvParam& from);
+
+  inline ConvParam& operator=(const ConvParam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ConvParam& default_instance();
+
+  void Swap(ConvParam* other);
+
+  // implements Message ----------------------------------------------
+
+  ConvParam* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ConvParam& from);
+  void MergeFrom(const ConvParam& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 data_h = 1;
+  inline bool has_data_h() const;
+  inline void clear_data_h();
+  static const int kDataHFieldNumber = 1;
+  inline ::google::protobuf::int32 data_h() const;
+  inline void set_data_h(::google::protobuf::int32 value);
+
+  // optional int32 data_w = 2;
+  inline bool has_data_w() const;
+  inline void clear_data_w();
+  static const int kDataWFieldNumber = 2;
+  inline ::google::protobuf::int32 data_w() const;
+  inline void set_data_w(::google::protobuf::int32 value);
+
+  // optional int32 filter_h = 3;
+  inline bool has_filter_h() const;
+  inline void clear_filter_h();
+  static const int kFilterHFieldNumber = 3;
+  inline ::google::protobuf::int32 filter_h() const;
+  inline void set_filter_h(::google::protobuf::int32 value);
+
+  // optional int32 filter_w = 4;
+  inline bool has_filter_w() const;
+  inline void clear_filter_w();
+  static const int kFilterWFieldNumber = 4;
+  inline ::google::protobuf::int32 filter_w() const;
+  inline void set_filter_w(::google::protobuf::int32 value);
+
+  // optional int32 stride_h = 5 [default = 1];
+  inline bool has_stride_h() const;
+  inline void clear_stride_h();
+  static const int kStrideHFieldNumber = 5;
+  inline ::google::protobuf::int32 stride_h() const;
+  inline void set_stride_h(::google::protobuf::int32 value);
+
+  // optional int32 stride_w = 6 [default = 1];
+  inline bool has_stride_w() const;
+  inline void clear_stride_w();
+  static const int kStrideWFieldNumber = 6;
+  inline ::google::protobuf::int32 stride_w() const;
+  inline void set_stride_w(::google::protobuf::int32 value);
+
+  // optional int32 pad_h = 7 [default = 0];
+  inline bool has_pad_h() const;
+  inline void clear_pad_h();
+  static const int kPadHFieldNumber = 7;
+  inline ::google::protobuf::int32 pad_h() const;
+  inline void set_pad_h(::google::protobuf::int32 value);
+
+  // optional int32 pad_w = 8 [default = 0];
+  inline bool has_pad_w() const;
+  inline void clear_pad_w();
+  static const int kPadWFieldNumber = 8;
+  inline ::google::protobuf::int32 pad_w() const;
+  inline void set_pad_w(::google::protobuf::int32 value);
+
+  // optional int32 channels = 9 [default = 1];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 9;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GET.ConvParam)
+ private:
+  inline void set_has_data_h();
+  inline void clear_has_data_h();
+  inline void set_has_data_w();
+  inline void clear_has_data_w();
+  inline void set_has_filter_h();
+  inline void clear_has_filter_h();
+  inline void set_has_filter_w();
+  inline void clear_has_filter_w();
+  inline void set_has_stride_h();
+  inline void clear_has_stride_h();
+  inline void set_has_stride_w();
+  inline void clear_has_stride_w();
+  inline void set_has_pad_h();
+  inline void clear_has_pad_h();
+  inline void set_has_pad_w();
+  inline void clear_has_pad_w();
+  inline void set_has_channels();
+  inline void clear_has_channels();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 data_h_;
+  ::google::protobuf::int32 data_w_;
+  ::google::protobuf::int32 filter_h_;
+  ::google::protobuf::int32 filter_w_;
+  ::google::protobuf::int32 stride_h_;
+  ::google::protobuf::int32 stride_w_;
+  ::google::protobuf::int32 pad_h_;
+  ::google::protobuf::int32 pad_w_;
+  ::google::protobuf::int32 channels_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GET_2eproto();
+  friend void protobuf_AssignDesc_GET_2eproto();
+  friend void protobuf_ShutdownFile_GET_2eproto();
+
+  void InitAsDefaultInstance();
+  static ConvParam* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PoolParam : public ::google::protobuf::Message {
+ public:
+  PoolParam();
+  virtual ~PoolParam();
+
+  PoolParam(const PoolParam& from);
+
+  inline PoolParam& operator=(const PoolParam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PoolParam& default_instance();
+
+  void Swap(PoolParam* other);
+
+  // implements Message ----------------------------------------------
+
+  PoolParam* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PoolParam& from);
+  void MergeFrom(const PoolParam& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 data_h = 1;
+  inline bool has_data_h() const;
+  inline void clear_data_h();
+  static const int kDataHFieldNumber = 1;
+  inline ::google::protobuf::int32 data_h() const;
+  inline void set_data_h(::google::protobuf::int32 value);
+
+  // optional int32 data_w = 2;
+  inline bool has_data_w() const;
+  inline void clear_data_w();
+  static const int kDataWFieldNumber = 2;
+  inline ::google::protobuf::int32 data_w() const;
+  inline void set_data_w(::google::protobuf::int32 value);
+
+  // optional int32 kernel_h = 3;
+  inline bool has_kernel_h() const;
+  inline void clear_kernel_h();
+  static const int kKernelHFieldNumber = 3;
+  inline ::google::protobuf::int32 kernel_h() const;
+  inline void set_kernel_h(::google::protobuf::int32 value);
+
+  // optional int32 kernel_w = 4;
+  inline bool has_kernel_w() const;
+  inline void clear_kernel_w();
+  static const int kKernelWFieldNumber = 4;
+  inline ::google::protobuf::int32 kernel_w() const;
+  inline void set_kernel_w(::google::protobuf::int32 value);
+
+  // optional int32 stride_h = 5 [default = 1];
+  inline bool has_stride_h() const;
+  inline void clear_stride_h();
+  static const int kStrideHFieldNumber = 5;
+  inline ::google::protobuf::int32 stride_h() const;
+  inline void set_stride_h(::google::protobuf::int32 value);
+
+  // optional int32 stride_w = 6 [default = 1];
+  inline bool has_stride_w() const;
+  inline void clear_stride_w();
+  static const int kStrideWFieldNumber = 6;
+  inline ::google::protobuf::int32 stride_w() const;
+  inline void set_stride_w(::google::protobuf::int32 value);
+
+  // optional int32 pad_h = 7 [default = 0];
+  inline bool has_pad_h() const;
+  inline void clear_pad_h();
+  static const int kPadHFieldNumber = 7;
+  inline ::google::protobuf::int32 pad_h() const;
+  inline void set_pad_h(::google::protobuf::int32 value);
+
+  // optional int32 pad_w = 8 [default = 0];
+  inline bool has_pad_w() const;
+  inline void clear_pad_w();
+  static const int kPadWFieldNumber = 8;
+  inline ::google::protobuf::int32 pad_w() const;
+  inline void set_pad_w(::google::protobuf::int32 value);
+
+  // optional int32 channels = 9 [default = 1];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 9;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GET.PoolParam)
+ private:
+  inline void set_has_data_h();
+  inline void clear_has_data_h();
+  inline void set_has_data_w();
+  inline void clear_has_data_w();
+  inline void set_has_kernel_h();
+  inline void clear_has_kernel_h();
+  inline void set_has_kernel_w();
+  inline void clear_has_kernel_w();
+  inline void set_has_stride_h();
+  inline void clear_has_stride_h();
+  inline void set_has_stride_w();
+  inline void clear_has_stride_w();
+  inline void set_has_pad_h();
+  inline void clear_has_pad_h();
+  inline void set_has_pad_w();
+  inline void clear_has_pad_w();
+  inline void set_has_channels();
+  inline void clear_has_channels();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 data_h_;
+  ::google::protobuf::int32 data_w_;
+  ::google::protobuf::int32 kernel_h_;
+  ::google::protobuf::int32 kernel_w_;
+  ::google::protobuf::int32 stride_h_;
+  ::google::protobuf::int32 stride_w_;
+  ::google::protobuf::int32 pad_h_;
+  ::google::protobuf::int32 pad_w_;
+  ::google::protobuf::int32 channels_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(9 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GET_2eproto();
+  friend void protobuf_AssignDesc_GET_2eproto();
+  friend void protobuf_ShutdownFile_GET_2eproto();
+
+  void InitAsDefaultInstance();
+  static PoolParam* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LRNParam : public ::google::protobuf::Message {
+ public:
+  LRNParam();
+  virtual ~LRNParam();
+
+  LRNParam(const LRNParam& from);
+
+  inline LRNParam& operator=(const LRNParam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LRNParam& default_instance();
+
+  void Swap(LRNParam* other);
+
+  // implements Message ----------------------------------------------
+
+  LRNParam* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LRNParam& from);
+  void MergeFrom(const LRNParam& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 channels = 1 [default = 0];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 1;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GET.LRNParam)
+ private:
+  inline void set_has_channels();
+  inline void clear_has_channels();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 channels_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GET_2eproto();
+  friend void protobuf_AssignDesc_GET_2eproto();
+  friend void protobuf_ShutdownFile_GET_2eproto();
+
+  void InitAsDefaultInstance();
+  static LRNParam* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ReLUParam : public ::google::protobuf::Message {
+ public:
+  ReLUParam();
+  virtual ~ReLUParam();
+
+  ReLUParam(const ReLUParam& from);
+
+  inline ReLUParam& operator=(const ReLUParam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ReLUParam& default_instance();
+
+  void Swap(ReLUParam* other);
+
+  // implements Message ----------------------------------------------
+
+  ReLUParam* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ReLUParam& from);
+  void MergeFrom(const ReLUParam& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 height = 1 [default = 1];
+  inline bool has_height() const;
+  inline void clear_height();
+  static const int kHeightFieldNumber = 1;
+  inline ::google::protobuf::int32 height() const;
+  inline void set_height(::google::protobuf::int32 value);
+
+  // optional int32 width = 2;
+  inline bool has_width() const;
+  inline void clear_width();
+  static const int kWidthFieldNumber = 2;
+  inline ::google::protobuf::int32 width() const;
+  inline void set_width(::google::protobuf::int32 value);
+
+  // optional int32 channels = 3 [default = 1];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 3;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GET.ReLUParam)
+ private:
+  inline void set_has_height();
+  inline void clear_has_height();
+  inline void set_has_width();
+  inline void clear_has_width();
+  inline void set_has_channels();
+  inline void clear_has_channels();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 height_;
+  ::google::protobuf::int32 width_;
+  ::google::protobuf::int32 channels_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GET_2eproto();
+  friend void protobuf_AssignDesc_GET_2eproto();
+  friend void protobuf_ShutdownFile_GET_2eproto();
+
+  void InitAsDefaultInstance();
+  static ReLUParam* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SigmoidParam : public ::google::protobuf::Message {
+ public:
+  SigmoidParam();
+  virtual ~SigmoidParam();
+
+  SigmoidParam(const SigmoidParam& from);
+
+  inline SigmoidParam& operator=(const SigmoidParam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SigmoidParam& default_instance();
+
+  void Swap(SigmoidParam* other);
+
+  // implements Message ----------------------------------------------
+
+  SigmoidParam* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SigmoidParam& from);
+  void MergeFrom(const SigmoidParam& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 height = 1 [default = 1];
+  inline bool has_height() const;
+  inline void clear_height();
+  static const int kHeightFieldNumber = 1;
+  inline ::google::protobuf::int32 height() const;
+  inline void set_height(::google::protobuf::int32 value);
+
+  // optional int32 width = 2;
+  inline bool has_width() const;
+  inline void clear_width();
+  static const int kWidthFieldNumber = 2;
+  inline ::google::protobuf::int32 width() const;
+  inline void set_width(::google::protobuf::int32 value);
+
+  // optional int32 channels = 3 [default = 1];
+  inline bool has_channels() const;
+  inline void clear_channels();
+  static const int kChannelsFieldNumber = 3;
+  inline ::google::protobuf::int32 channels() const;
+  inline void set_channels(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:GET.SigmoidParam)
+ private:
+  inline void set_has_height();
+  inline void clear_has_height();
+  inline void set_has_width();
+  inline void clear_has_width();
+  inline void set_has_channels();
+  inline void clear_has_channels();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::int32 height_;
+  ::google::protobuf::int32 width_;
+  ::google::protobuf::int32 channels_;
+
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
+
+  friend void  protobuf_AddDesc_GET_2eproto();
+  friend void protobuf_AssignDesc_GET_2eproto();
+  friend void protobuf_ShutdownFile_GET_2eproto();
+
+  void InitAsDefaultInstance();
+  static SigmoidParam* default_instance_;
 };
 // ===================================================================
 
@@ -983,6 +1654,196 @@ inline void TaskParam::set_allocated_mul_param(::GET::MulParam* mul_param) {
   }
 }
 
+// optional .GET.ConvParam conv_param = 11;
+inline bool TaskParam::has_conv_param() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void TaskParam::set_has_conv_param() {
+  _has_bits_[0] |= 0x00000400u;
+}
+inline void TaskParam::clear_has_conv_param() {
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline void TaskParam::clear_conv_param() {
+  if (conv_param_ != NULL) conv_param_->::GET::ConvParam::Clear();
+  clear_has_conv_param();
+}
+inline const ::GET::ConvParam& TaskParam::conv_param() const {
+  return conv_param_ != NULL ? *conv_param_ : *default_instance_->conv_param_;
+}
+inline ::GET::ConvParam* TaskParam::mutable_conv_param() {
+  set_has_conv_param();
+  if (conv_param_ == NULL) conv_param_ = new ::GET::ConvParam;
+  return conv_param_;
+}
+inline ::GET::ConvParam* TaskParam::release_conv_param() {
+  clear_has_conv_param();
+  ::GET::ConvParam* temp = conv_param_;
+  conv_param_ = NULL;
+  return temp;
+}
+inline void TaskParam::set_allocated_conv_param(::GET::ConvParam* conv_param) {
+  delete conv_param_;
+  conv_param_ = conv_param;
+  if (conv_param) {
+    set_has_conv_param();
+  } else {
+    clear_has_conv_param();
+  }
+}
+
+// optional .GET.PoolParam pool_param = 12;
+inline bool TaskParam::has_pool_param() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void TaskParam::set_has_pool_param() {
+  _has_bits_[0] |= 0x00000800u;
+}
+inline void TaskParam::clear_has_pool_param() {
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline void TaskParam::clear_pool_param() {
+  if (pool_param_ != NULL) pool_param_->::GET::PoolParam::Clear();
+  clear_has_pool_param();
+}
+inline const ::GET::PoolParam& TaskParam::pool_param() const {
+  return pool_param_ != NULL ? *pool_param_ : *default_instance_->pool_param_;
+}
+inline ::GET::PoolParam* TaskParam::mutable_pool_param() {
+  set_has_pool_param();
+  if (pool_param_ == NULL) pool_param_ = new ::GET::PoolParam;
+  return pool_param_;
+}
+inline ::GET::PoolParam* TaskParam::release_pool_param() {
+  clear_has_pool_param();
+  ::GET::PoolParam* temp = pool_param_;
+  pool_param_ = NULL;
+  return temp;
+}
+inline void TaskParam::set_allocated_pool_param(::GET::PoolParam* pool_param) {
+  delete pool_param_;
+  pool_param_ = pool_param;
+  if (pool_param) {
+    set_has_pool_param();
+  } else {
+    clear_has_pool_param();
+  }
+}
+
+// optional .GET.LRNParam lrn_param = 13;
+inline bool TaskParam::has_lrn_param() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void TaskParam::set_has_lrn_param() {
+  _has_bits_[0] |= 0x00001000u;
+}
+inline void TaskParam::clear_has_lrn_param() {
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline void TaskParam::clear_lrn_param() {
+  if (lrn_param_ != NULL) lrn_param_->::GET::LRNParam::Clear();
+  clear_has_lrn_param();
+}
+inline const ::GET::LRNParam& TaskParam::lrn_param() const {
+  return lrn_param_ != NULL ? *lrn_param_ : *default_instance_->lrn_param_;
+}
+inline ::GET::LRNParam* TaskParam::mutable_lrn_param() {
+  set_has_lrn_param();
+  if (lrn_param_ == NULL) lrn_param_ = new ::GET::LRNParam;
+  return lrn_param_;
+}
+inline ::GET::LRNParam* TaskParam::release_lrn_param() {
+  clear_has_lrn_param();
+  ::GET::LRNParam* temp = lrn_param_;
+  lrn_param_ = NULL;
+  return temp;
+}
+inline void TaskParam::set_allocated_lrn_param(::GET::LRNParam* lrn_param) {
+  delete lrn_param_;
+  lrn_param_ = lrn_param;
+  if (lrn_param) {
+    set_has_lrn_param();
+  } else {
+    clear_has_lrn_param();
+  }
+}
+
+// optional .GET.ReLUParam relu_param = 14;
+inline bool TaskParam::has_relu_param() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void TaskParam::set_has_relu_param() {
+  _has_bits_[0] |= 0x00002000u;
+}
+inline void TaskParam::clear_has_relu_param() {
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline void TaskParam::clear_relu_param() {
+  if (relu_param_ != NULL) relu_param_->::GET::ReLUParam::Clear();
+  clear_has_relu_param();
+}
+inline const ::GET::ReLUParam& TaskParam::relu_param() const {
+  return relu_param_ != NULL ? *relu_param_ : *default_instance_->relu_param_;
+}
+inline ::GET::ReLUParam* TaskParam::mutable_relu_param() {
+  set_has_relu_param();
+  if (relu_param_ == NULL) relu_param_ = new ::GET::ReLUParam;
+  return relu_param_;
+}
+inline ::GET::ReLUParam* TaskParam::release_relu_param() {
+  clear_has_relu_param();
+  ::GET::ReLUParam* temp = relu_param_;
+  relu_param_ = NULL;
+  return temp;
+}
+inline void TaskParam::set_allocated_relu_param(::GET::ReLUParam* relu_param) {
+  delete relu_param_;
+  relu_param_ = relu_param;
+  if (relu_param) {
+    set_has_relu_param();
+  } else {
+    clear_has_relu_param();
+  }
+}
+
+// optional .GET.SigmoidParam sigmoid_param = 15;
+inline bool TaskParam::has_sigmoid_param() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void TaskParam::set_has_sigmoid_param() {
+  _has_bits_[0] |= 0x00004000u;
+}
+inline void TaskParam::clear_has_sigmoid_param() {
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline void TaskParam::clear_sigmoid_param() {
+  if (sigmoid_param_ != NULL) sigmoid_param_->::GET::SigmoidParam::Clear();
+  clear_has_sigmoid_param();
+}
+inline const ::GET::SigmoidParam& TaskParam::sigmoid_param() const {
+  return sigmoid_param_ != NULL ? *sigmoid_param_ : *default_instance_->sigmoid_param_;
+}
+inline ::GET::SigmoidParam* TaskParam::mutable_sigmoid_param() {
+  set_has_sigmoid_param();
+  if (sigmoid_param_ == NULL) sigmoid_param_ = new ::GET::SigmoidParam;
+  return sigmoid_param_;
+}
+inline ::GET::SigmoidParam* TaskParam::release_sigmoid_param() {
+  clear_has_sigmoid_param();
+  ::GET::SigmoidParam* temp = sigmoid_param_;
+  sigmoid_param_ = NULL;
+  return temp;
+}
+inline void TaskParam::set_allocated_sigmoid_param(::GET::SigmoidParam* sigmoid_param) {
+  delete sigmoid_param_;
+  sigmoid_param_ = sigmoid_param;
+  if (sigmoid_param) {
+    set_has_sigmoid_param();
+  } else {
+    clear_has_sigmoid_param();
+  }
+}
+
 // -------------------------------------------------------------------
 
 // AddParam
@@ -1127,103 +1988,81 @@ inline void SubParam::set_channels(::google::protobuf::int32 value) {
 
 // MulParam
 
-// optional int32 height_A = 1;
-inline bool MulParam::has_height_a() const {
+// optional int32 M = 1;
+inline bool MulParam::has_m() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void MulParam::set_has_height_a() {
+inline void MulParam::set_has_m() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void MulParam::clear_has_height_a() {
+inline void MulParam::clear_has_m() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void MulParam::clear_height_a() {
-  height_a_ = 0;
-  clear_has_height_a();
+inline void MulParam::clear_m() {
+  m_ = 0;
+  clear_has_m();
 }
-inline ::google::protobuf::int32 MulParam::height_a() const {
-  return height_a_;
+inline ::google::protobuf::int32 MulParam::m() const {
+  return m_;
 }
-inline void MulParam::set_height_a(::google::protobuf::int32 value) {
-  set_has_height_a();
-  height_a_ = value;
+inline void MulParam::set_m(::google::protobuf::int32 value) {
+  set_has_m();
+  m_ = value;
 }
 
-// optional int32 width_A = 2;
-inline bool MulParam::has_width_a() const {
+// optional int32 K = 2;
+inline bool MulParam::has_k() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void MulParam::set_has_width_a() {
+inline void MulParam::set_has_k() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void MulParam::clear_has_width_a() {
+inline void MulParam::clear_has_k() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void MulParam::clear_width_a() {
-  width_a_ = 0;
-  clear_has_width_a();
+inline void MulParam::clear_k() {
+  k_ = 0;
+  clear_has_k();
 }
-inline ::google::protobuf::int32 MulParam::width_a() const {
-  return width_a_;
+inline ::google::protobuf::int32 MulParam::k() const {
+  return k_;
 }
-inline void MulParam::set_width_a(::google::protobuf::int32 value) {
-  set_has_width_a();
-  width_a_ = value;
+inline void MulParam::set_k(::google::protobuf::int32 value) {
+  set_has_k();
+  k_ = value;
 }
 
-// optional int32 height_B = 3;
-inline bool MulParam::has_height_b() const {
+// optional int32 N = 3;
+inline bool MulParam::has_n() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void MulParam::set_has_height_b() {
+inline void MulParam::set_has_n() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void MulParam::clear_has_height_b() {
+inline void MulParam::clear_has_n() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void MulParam::clear_height_b() {
-  height_b_ = 0;
-  clear_has_height_b();
+inline void MulParam::clear_n() {
+  n_ = 0;
+  clear_has_n();
 }
-inline ::google::protobuf::int32 MulParam::height_b() const {
-  return height_b_;
+inline ::google::protobuf::int32 MulParam::n() const {
+  return n_;
 }
-inline void MulParam::set_height_b(::google::protobuf::int32 value) {
-  set_has_height_b();
-  height_b_ = value;
+inline void MulParam::set_n(::google::protobuf::int32 value) {
+  set_has_n();
+  n_ = value;
 }
 
-// optional int32 width_B = 4;
-inline bool MulParam::has_width_b() const {
+// optional int32 channels = 4 [default = 1];
+inline bool MulParam::has_channels() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void MulParam::set_has_width_b() {
+inline void MulParam::set_has_channels() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void MulParam::clear_has_width_b() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void MulParam::clear_width_b() {
-  width_b_ = 0;
-  clear_has_width_b();
-}
-inline ::google::protobuf::int32 MulParam::width_b() const {
-  return width_b_;
-}
-inline void MulParam::set_width_b(::google::protobuf::int32 value) {
-  set_has_width_b();
-  width_b_ = value;
-}
-
-// optional int32 channels = 5 [default = 1];
-inline bool MulParam::has_channels() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
-}
-inline void MulParam::set_has_channels() {
-  _has_bits_[0] |= 0x00000010u;
-}
 inline void MulParam::clear_has_channels() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void MulParam::clear_channels() {
   channels_ = 1;
@@ -1233,6 +2072,576 @@ inline ::google::protobuf::int32 MulParam::channels() const {
   return channels_;
 }
 inline void MulParam::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// ConvParam
+
+// optional int32 data_h = 1;
+inline bool ConvParam::has_data_h() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ConvParam::set_has_data_h() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ConvParam::clear_has_data_h() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ConvParam::clear_data_h() {
+  data_h_ = 0;
+  clear_has_data_h();
+}
+inline ::google::protobuf::int32 ConvParam::data_h() const {
+  return data_h_;
+}
+inline void ConvParam::set_data_h(::google::protobuf::int32 value) {
+  set_has_data_h();
+  data_h_ = value;
+}
+
+// optional int32 data_w = 2;
+inline bool ConvParam::has_data_w() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ConvParam::set_has_data_w() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ConvParam::clear_has_data_w() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ConvParam::clear_data_w() {
+  data_w_ = 0;
+  clear_has_data_w();
+}
+inline ::google::protobuf::int32 ConvParam::data_w() const {
+  return data_w_;
+}
+inline void ConvParam::set_data_w(::google::protobuf::int32 value) {
+  set_has_data_w();
+  data_w_ = value;
+}
+
+// optional int32 filter_h = 3;
+inline bool ConvParam::has_filter_h() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ConvParam::set_has_filter_h() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ConvParam::clear_has_filter_h() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ConvParam::clear_filter_h() {
+  filter_h_ = 0;
+  clear_has_filter_h();
+}
+inline ::google::protobuf::int32 ConvParam::filter_h() const {
+  return filter_h_;
+}
+inline void ConvParam::set_filter_h(::google::protobuf::int32 value) {
+  set_has_filter_h();
+  filter_h_ = value;
+}
+
+// optional int32 filter_w = 4;
+inline bool ConvParam::has_filter_w() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ConvParam::set_has_filter_w() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ConvParam::clear_has_filter_w() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ConvParam::clear_filter_w() {
+  filter_w_ = 0;
+  clear_has_filter_w();
+}
+inline ::google::protobuf::int32 ConvParam::filter_w() const {
+  return filter_w_;
+}
+inline void ConvParam::set_filter_w(::google::protobuf::int32 value) {
+  set_has_filter_w();
+  filter_w_ = value;
+}
+
+// optional int32 stride_h = 5 [default = 1];
+inline bool ConvParam::has_stride_h() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void ConvParam::set_has_stride_h() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void ConvParam::clear_has_stride_h() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ConvParam::clear_stride_h() {
+  stride_h_ = 1;
+  clear_has_stride_h();
+}
+inline ::google::protobuf::int32 ConvParam::stride_h() const {
+  return stride_h_;
+}
+inline void ConvParam::set_stride_h(::google::protobuf::int32 value) {
+  set_has_stride_h();
+  stride_h_ = value;
+}
+
+// optional int32 stride_w = 6 [default = 1];
+inline bool ConvParam::has_stride_w() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void ConvParam::set_has_stride_w() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void ConvParam::clear_has_stride_w() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void ConvParam::clear_stride_w() {
+  stride_w_ = 1;
+  clear_has_stride_w();
+}
+inline ::google::protobuf::int32 ConvParam::stride_w() const {
+  return stride_w_;
+}
+inline void ConvParam::set_stride_w(::google::protobuf::int32 value) {
+  set_has_stride_w();
+  stride_w_ = value;
+}
+
+// optional int32 pad_h = 7 [default = 0];
+inline bool ConvParam::has_pad_h() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void ConvParam::set_has_pad_h() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void ConvParam::clear_has_pad_h() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void ConvParam::clear_pad_h() {
+  pad_h_ = 0;
+  clear_has_pad_h();
+}
+inline ::google::protobuf::int32 ConvParam::pad_h() const {
+  return pad_h_;
+}
+inline void ConvParam::set_pad_h(::google::protobuf::int32 value) {
+  set_has_pad_h();
+  pad_h_ = value;
+}
+
+// optional int32 pad_w = 8 [default = 0];
+inline bool ConvParam::has_pad_w() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void ConvParam::set_has_pad_w() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void ConvParam::clear_has_pad_w() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void ConvParam::clear_pad_w() {
+  pad_w_ = 0;
+  clear_has_pad_w();
+}
+inline ::google::protobuf::int32 ConvParam::pad_w() const {
+  return pad_w_;
+}
+inline void ConvParam::set_pad_w(::google::protobuf::int32 value) {
+  set_has_pad_w();
+  pad_w_ = value;
+}
+
+// optional int32 channels = 9 [default = 1];
+inline bool ConvParam::has_channels() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void ConvParam::set_has_channels() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void ConvParam::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void ConvParam::clear_channels() {
+  channels_ = 1;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 ConvParam::channels() const {
+  return channels_;
+}
+inline void ConvParam::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// PoolParam
+
+// optional int32 data_h = 1;
+inline bool PoolParam::has_data_h() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PoolParam::set_has_data_h() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PoolParam::clear_has_data_h() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PoolParam::clear_data_h() {
+  data_h_ = 0;
+  clear_has_data_h();
+}
+inline ::google::protobuf::int32 PoolParam::data_h() const {
+  return data_h_;
+}
+inline void PoolParam::set_data_h(::google::protobuf::int32 value) {
+  set_has_data_h();
+  data_h_ = value;
+}
+
+// optional int32 data_w = 2;
+inline bool PoolParam::has_data_w() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void PoolParam::set_has_data_w() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void PoolParam::clear_has_data_w() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void PoolParam::clear_data_w() {
+  data_w_ = 0;
+  clear_has_data_w();
+}
+inline ::google::protobuf::int32 PoolParam::data_w() const {
+  return data_w_;
+}
+inline void PoolParam::set_data_w(::google::protobuf::int32 value) {
+  set_has_data_w();
+  data_w_ = value;
+}
+
+// optional int32 kernel_h = 3;
+inline bool PoolParam::has_kernel_h() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void PoolParam::set_has_kernel_h() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void PoolParam::clear_has_kernel_h() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void PoolParam::clear_kernel_h() {
+  kernel_h_ = 0;
+  clear_has_kernel_h();
+}
+inline ::google::protobuf::int32 PoolParam::kernel_h() const {
+  return kernel_h_;
+}
+inline void PoolParam::set_kernel_h(::google::protobuf::int32 value) {
+  set_has_kernel_h();
+  kernel_h_ = value;
+}
+
+// optional int32 kernel_w = 4;
+inline bool PoolParam::has_kernel_w() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void PoolParam::set_has_kernel_w() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void PoolParam::clear_has_kernel_w() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void PoolParam::clear_kernel_w() {
+  kernel_w_ = 0;
+  clear_has_kernel_w();
+}
+inline ::google::protobuf::int32 PoolParam::kernel_w() const {
+  return kernel_w_;
+}
+inline void PoolParam::set_kernel_w(::google::protobuf::int32 value) {
+  set_has_kernel_w();
+  kernel_w_ = value;
+}
+
+// optional int32 stride_h = 5 [default = 1];
+inline bool PoolParam::has_stride_h() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void PoolParam::set_has_stride_h() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void PoolParam::clear_has_stride_h() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void PoolParam::clear_stride_h() {
+  stride_h_ = 1;
+  clear_has_stride_h();
+}
+inline ::google::protobuf::int32 PoolParam::stride_h() const {
+  return stride_h_;
+}
+inline void PoolParam::set_stride_h(::google::protobuf::int32 value) {
+  set_has_stride_h();
+  stride_h_ = value;
+}
+
+// optional int32 stride_w = 6 [default = 1];
+inline bool PoolParam::has_stride_w() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void PoolParam::set_has_stride_w() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void PoolParam::clear_has_stride_w() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void PoolParam::clear_stride_w() {
+  stride_w_ = 1;
+  clear_has_stride_w();
+}
+inline ::google::protobuf::int32 PoolParam::stride_w() const {
+  return stride_w_;
+}
+inline void PoolParam::set_stride_w(::google::protobuf::int32 value) {
+  set_has_stride_w();
+  stride_w_ = value;
+}
+
+// optional int32 pad_h = 7 [default = 0];
+inline bool PoolParam::has_pad_h() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void PoolParam::set_has_pad_h() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void PoolParam::clear_has_pad_h() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void PoolParam::clear_pad_h() {
+  pad_h_ = 0;
+  clear_has_pad_h();
+}
+inline ::google::protobuf::int32 PoolParam::pad_h() const {
+  return pad_h_;
+}
+inline void PoolParam::set_pad_h(::google::protobuf::int32 value) {
+  set_has_pad_h();
+  pad_h_ = value;
+}
+
+// optional int32 pad_w = 8 [default = 0];
+inline bool PoolParam::has_pad_w() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void PoolParam::set_has_pad_w() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void PoolParam::clear_has_pad_w() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void PoolParam::clear_pad_w() {
+  pad_w_ = 0;
+  clear_has_pad_w();
+}
+inline ::google::protobuf::int32 PoolParam::pad_w() const {
+  return pad_w_;
+}
+inline void PoolParam::set_pad_w(::google::protobuf::int32 value) {
+  set_has_pad_w();
+  pad_w_ = value;
+}
+
+// optional int32 channels = 9 [default = 1];
+inline bool PoolParam::has_channels() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void PoolParam::set_has_channels() {
+  _has_bits_[0] |= 0x00000100u;
+}
+inline void PoolParam::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline void PoolParam::clear_channels() {
+  channels_ = 1;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 PoolParam::channels() const {
+  return channels_;
+}
+inline void PoolParam::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// LRNParam
+
+// optional int32 channels = 1 [default = 0];
+inline bool LRNParam::has_channels() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void LRNParam::set_has_channels() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void LRNParam::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void LRNParam::clear_channels() {
+  channels_ = 0;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 LRNParam::channels() const {
+  return channels_;
+}
+inline void LRNParam::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// ReLUParam
+
+// optional int32 height = 1 [default = 1];
+inline bool ReLUParam::has_height() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ReLUParam::set_has_height() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ReLUParam::clear_has_height() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ReLUParam::clear_height() {
+  height_ = 1;
+  clear_has_height();
+}
+inline ::google::protobuf::int32 ReLUParam::height() const {
+  return height_;
+}
+inline void ReLUParam::set_height(::google::protobuf::int32 value) {
+  set_has_height();
+  height_ = value;
+}
+
+// optional int32 width = 2;
+inline bool ReLUParam::has_width() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ReLUParam::set_has_width() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ReLUParam::clear_has_width() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ReLUParam::clear_width() {
+  width_ = 0;
+  clear_has_width();
+}
+inline ::google::protobuf::int32 ReLUParam::width() const {
+  return width_;
+}
+inline void ReLUParam::set_width(::google::protobuf::int32 value) {
+  set_has_width();
+  width_ = value;
+}
+
+// optional int32 channels = 3 [default = 1];
+inline bool ReLUParam::has_channels() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ReLUParam::set_has_channels() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ReLUParam::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ReLUParam::clear_channels() {
+  channels_ = 1;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 ReLUParam::channels() const {
+  return channels_;
+}
+inline void ReLUParam::set_channels(::google::protobuf::int32 value) {
+  set_has_channels();
+  channels_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// SigmoidParam
+
+// optional int32 height = 1 [default = 1];
+inline bool SigmoidParam::has_height() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SigmoidParam::set_has_height() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SigmoidParam::clear_has_height() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SigmoidParam::clear_height() {
+  height_ = 1;
+  clear_has_height();
+}
+inline ::google::protobuf::int32 SigmoidParam::height() const {
+  return height_;
+}
+inline void SigmoidParam::set_height(::google::protobuf::int32 value) {
+  set_has_height();
+  height_ = value;
+}
+
+// optional int32 width = 2;
+inline bool SigmoidParam::has_width() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void SigmoidParam::set_has_width() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void SigmoidParam::clear_has_width() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void SigmoidParam::clear_width() {
+  width_ = 0;
+  clear_has_width();
+}
+inline ::google::protobuf::int32 SigmoidParam::width() const {
+  return width_;
+}
+inline void SigmoidParam::set_width(::google::protobuf::int32 value) {
+  set_has_width();
+  width_ = value;
+}
+
+// optional int32 channels = 3 [default = 1];
+inline bool SigmoidParam::has_channels() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void SigmoidParam::set_has_channels() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void SigmoidParam::clear_has_channels() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void SigmoidParam::clear_channels() {
+  channels_ = 1;
+  clear_has_channels();
+}
+inline ::google::protobuf::int32 SigmoidParam::channels() const {
+  return channels_;
+}
+inline void SigmoidParam::set_channels(::google::protobuf::int32 value) {
   set_has_channels();
   channels_ = value;
 }
